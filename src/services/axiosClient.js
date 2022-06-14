@@ -1,5 +1,6 @@
 import axios from "axios";
 import LocalStorage from "../constants/LocalStorage";
+import localStoragePlus from "../utils/localStoragePlus";
 
 const axiosOptions = {
   baseURL: "https://kmin-ecommerce-be.herokuapp.com",
@@ -13,7 +14,9 @@ const axiosClient = axios.create(axiosOptions);
 axiosClient.interceptors.request.use(
   (request) => {
     if (!request.headers.Authorization) {
-      const token = localStorage.getItem(LocalStorage.Auth.token);
+      const authStorage = localStoragePlus.createStorage(LocalStorage.Auth.key);
+
+      const token = authStorage.getItem(LocalStorage.Auth.token);
       request.headers.Authorization = `Bearer ${token}`;
     }
     return request;

@@ -47,9 +47,10 @@ const slice = createSlice({
     },
     [login.fulfilled]: (state, { payload }) => {
       const { token, refreshToken, user: account } = payload;
+      const authStorage = localStoragePlus.createStorage(LocalStorage.Auth.key);
 
-      localStorage.setItem(LocalStorage.Auth.token, token);
-      localStorage.setItem(LocalStorage.Auth.refreshToken, refreshToken);
+      authStorage.setItem(LocalStorage.Auth.token, token);
+      authStorage.setItem(LocalStorage.Auth.refreshToken, refreshToken);
 
       state.account = account;
       state.isLogin = true;
@@ -63,8 +64,10 @@ const slice = createSlice({
       state.isLoading = false;
     },
     [logout.fulfilled]: (state) => {
-      localStorage.removeItem(LocalStorage.Auth.token);
-      localStorage.removeItem(LocalStorage.Auth.refreshToken);
+      const authStorage = localStoragePlus.createStorage(LocalStorage.Auth.key);
+
+      authStorage.removeItem(LocalStorage.Auth.token);
+      authStorage.removeItem(LocalStorage.Auth.refreshToken);
 
       state.account = {};
       state.isLogin = false;
